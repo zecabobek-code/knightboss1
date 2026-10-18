@@ -1,1 +1,33 @@
+name: Compilar mod
 
+on:
+  push:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Baixar o código
+        uses: actions/checkout@v4
+
+      - name: Instalar Java 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+
+      - name: Instalar Gradle 8.1.1
+        uses: gradle/actions/setup-gradle@v3
+        with:
+          gradle-version: 8.1.1
+
+      - name: Compilar
+        run: gradle build --no-daemon
+
+      - name: Guardar o .jar
+        uses: actions/upload-artifact@v4
+        with:
+          name: knightboss-mod
+          path: build/libs/*.jar
+          
